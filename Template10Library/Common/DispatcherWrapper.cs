@@ -7,6 +7,7 @@ using Windows.UI.Core;
 
 namespace Template10.Common
 {
+    // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-DispatcherWrapper
     public class DispatcherWrapper
     {
         public DispatcherWrapper(CoreDispatcher dispatcher)
@@ -59,6 +60,15 @@ namespace Template10.Common
                 });
                 await tcs.Task;
                 return tcs.Task.Result;
+            }
+        }
+
+        public void Dispatch(Action action)
+        {
+            if (dispatcher.HasThreadAccess) { action(); }
+            else
+            {
+                dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => action()).AsTask().Wait();
             }
         }
     }

@@ -33,6 +33,7 @@ namespace Template10.Common
                     // call system-level suspend
                     await OnSuspendingAsync(s, e);
                 }
+                catch { }
                 finally { deferral.Complete(); }
             };
         }
@@ -56,7 +57,7 @@ namespace Template10.Common
         /// The SplashFactory is a Func<> that returns an instantiated Splash view.
         /// Template 10 will automatically inject this visual before loading the app.
         /// </summary>
-        protected Func<SplashScreen, Page> SplashFactory { get; set; }
+        protected Func<SplashScreen, UserControl> SplashFactory { get; set; }
 
         /// <summary>
         /// CacheMaxDuration indicates the maximum TimeSpan for which cache data
@@ -80,6 +81,8 @@ namespace Template10.Common
 
         // it is the intent of Template 10 to no longer require Launched/Activated overrides, only OnStartAsync()
 
+        #pragma warning disable 809
+
         [Obsolete("Use OnStartAsync()")]
         protected override async void OnActivated(IActivatedEventArgs e) { await InternalActivatedAsync(e); }
 
@@ -100,6 +103,8 @@ namespace Template10.Common
 
         [Obsolete("Use OnStartAsync()")]
         protected override async void OnShareTargetActivated(ShareTargetActivatedEventArgs args) { await InternalActivatedAsync(args); }
+
+        #pragma warning restore 809
 
         /// <summary>
         /// This handles all the prelimimary stuff unique to Activated before calling OnStartAsync()
@@ -145,8 +150,12 @@ namespace Template10.Common
 
         // it is the intent of Template 10 to no longer require Launched/Activated overrides, only OnStartAsync()
 
+        #pragma warning disable 809
+
         [Obsolete("Use OnStartAsync()")]
         protected override void OnLaunched(LaunchActivatedEventArgs e) { InternalLaunchAsync(e as ILaunchActivatedEventArgs); }
+
+        #pragma warning restore 809
 
         /// <summary>
         /// This handles all the preliminary stuff unique to Launched before calling OnStartAsync().
@@ -290,7 +299,7 @@ namespace Template10.Common
         private async Task InitializeFrameAsync(ILaunchActivatedEventArgs e)
         {
             // first show the splash 
-            Page splash = null;
+            FrameworkElement splash = null;
             if (SplashFactory != null)
             {
                 Window.Current.Content = splash = SplashFactory(e.SplashScreen);
@@ -301,13 +310,16 @@ namespace Template10.Common
             await OnInitializeAsync(e);
 
             // create the default frame only if there's nothing already there
+            // if it is not null, by the way, then the developer injected something & they win
             if (Window.Current.Content == splash || Window.Current.Content == null)
             {
                 // build the default frame
-                var result = FrameFactory(true);
-                Window.Current.Content = result.Frame;
+                Window.Current.Content = NavigationServiceFactory(BackButton.Attach, ExistingContent.Include).Frame;
             }
         }
+
+        public enum BackButton { Attach, Ignore }
+        public enum ExistingContent { Include, Exclude }
 
         /// <summary>
         /// Craetes a new FamFrame and adds the resulting NavigationService to the 
@@ -316,17 +328,21 @@ namespace Template10.Common
         /// A developer should call this when creating a new/secondary frame.
         /// The shell back button should only be setup one time.
         /// </summary>
-        protected Services.NavigationService.NavigationService FrameFactory(bool setupShellBackButtonForDefaultFrame)
+        public Services.NavigationService.NavigationService NavigationServiceFactory(BackButton backButton, ExistingContent existingContent)
         {
             var frame = new Frame
             {
-                Language = Windows.Globalization.ApplicationLanguages.Languages[0]
+                Language = Windows.Globalization.ApplicationLanguages.Languages[0],
+                Content = (existingContent == ExistingContent.Include) ? Window.Current.Content : null,
             };
+
             var navigationService = new Services.NavigationService.NavigationService(frame);
             WindowWrapper.Current().NavigationServices.Add(navigationService);
 
-            if (setupShellBackButtonForDefaultFrame)
+            if (backButton == BackButton.Attach)
             {
+                // TODO: unattach others
+
                 // update shell back when backstack changes
                 // only the default frame in this case because secondary should not dismiss the app
                 frame.RegisterPropertyChangedCallback(Frame.BackStackDepthProperty, (s, args) => UpdateShellBackButton());

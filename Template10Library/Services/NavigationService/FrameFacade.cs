@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Template10.Services.NavigationService
 {
+    // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-NavigationService
     public class FrameFacade
     {
         public FrameFacade(Frame frame)
@@ -39,15 +40,15 @@ namespace Template10.Services.NavigationService
             return string.Format("{0}-PageState", FrameId);
         }
 
-        private Windows.Storage.ApplicationDataContainer frameStateContainer;
+        private Windows.Storage.ApplicationDataContainer _frameStateContainer;
         private Windows.Storage.ApplicationDataContainer FrameStateContainer()
         {
-            if (frameStateContainer != null)
-                return frameStateContainer;
+            if (_frameStateContainer != null)
+                return _frameStateContainer;
             var data = Windows.Storage.ApplicationData.Current;
             var key = GetFrameStateKey();
-            var container = data.LocalSettings.CreateContainer(key, Windows.Storage.ApplicationDataCreateDisposition.Always);
-            return container;
+            _frameStateContainer = data.LocalSettings.CreateContainer(key, Windows.Storage.ApplicationDataCreateDisposition.Always);
+            return _frameStateContainer;
         }
 
         public void SetFrameState(string key, string value)
