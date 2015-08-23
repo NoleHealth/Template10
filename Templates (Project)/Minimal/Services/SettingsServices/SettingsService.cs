@@ -35,5 +35,15 @@ namespace Minimal.Services.SettingsServices
                 Template10.Common.BootStrapper.Current.NavigationService.Refresh();
             }
         }
+
+        public int CacheMaxDurationDays
+        {
+            get { return _helper.Read<int>(nameof(CacheMaxDurationDays), 2); }
+            set
+            {
+                _helper.Write(nameof(CacheMaxDurationDays), value);
+                Template10.Common.BootStrapper.Current.NavigationService.Refresh();
+            }
+        }
     }
 }

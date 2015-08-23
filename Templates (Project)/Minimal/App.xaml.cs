@@ -1,4 +1,6 @@
-﻿using Minimal.Services.SettingsServices;
+﻿using Minimal.Services;
+using Minimal.Services.SettingsServices;
+using Minimal.ViewModels;
 using System;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
@@ -9,18 +11,23 @@ namespace Minimal
     // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-Bootstrapper
     sealed partial class App : Template10.Common.BootStrapper
     {
+        ShellViewModel _shellViewModel = null;
         public App()
         {
             InitializeComponent();
+            _shellViewModel = ShellDataSource.GetShellViewModel("");
 
             // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-Cache
-            CacheMaxDuration = TimeSpan.FromDays(2);
+            CacheMaxDuration = TimeSpan.FromDays(_shellViewModel.CacheMaxDurationDays);
 
             // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-BackButton
-            ShowShellBackButton = SettingsService.Instance.UseShellBackButton;
+            ShowShellBackButton = _shellViewModel.ShowShellBackButton;
 
-            // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-SplashScreen
-            SplashFactory = (e) => new Views.Splash(e);
+            if (_shellViewModel.ShowSplashScreen)
+            {
+                // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-SplashScreen
+                SplashFactory = (e) => new Views.Splash(e);
+            }
         }
 
         // runs even if restored from state
