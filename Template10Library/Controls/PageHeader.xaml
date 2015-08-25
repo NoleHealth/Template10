@@ -60,6 +60,12 @@
                 <TextBlock IsHitTestVisible="False" VerticalAlignment="Center"
                        Style="{StaticResource SubtitleTextBlockStyle}" 
                        Text="{Binding Text, FallbackValue='Page Header'}" Margin="16,0,0,0" />
+                <AutoSuggestBox x:Name="controlsSearchBox"
+                        Margin="0,8,12,0"
+                        Width="270"
+                        PlaceholderText="Search for controls"
+                        QueryIcon="Find" 
+                        />
             </StackPanel>
         </CommandBar.Content>
     </CommandBar>
