@@ -11,46 +11,47 @@ namespace Minimal.Services
 
     public class ShellDataSource
     {
-        private static ShellDataSource _ds = new ShellDataSource();
-        private static readonly object _lock = new object();
+        //private static ShellDataSource _ds = new ShellDataSource();
+        //private static readonly object _lock = new object();
 
-        private ShellViewModel _vm = null;
-        public ShellViewModel ShellViewModel { get { return this._vm; } }
+        //private ShellViewModel _vm = null;
+        //public ShellViewModel ShellViewModel { get { return this._vm; } }
 
         //ShellViewModel
-        public static async Task<ShellViewModel> GetShellViewModelAsync(string app)
-        {
-            await _ds.loadDataAsync(app);
+        //public static async Task<ShellViewModel> GetShellViewModelAsync(string app)
+        //{
+        //    await _ds.loadDataAsync(app);
 
-            return _ds.ShellViewModel;
-        }
+
+        //    return _ds.ShellViewModel;
+        //}
 
         public static ShellViewModel GetShellViewModel(string app)
         {
 
-            return GetShellViewModelAsync(app).Result;
-        }
+        //    return GetShellViewModelAsync(app).Result;
+        //}
 
-        private async Task loadDataAsync(string app)
-        {
-            lock (_lock)
-            {
-                if (this._vm != null)
-                    return;
-            }
+        //private async Task loadDataAsync(string app)
+        //{
+            //lock (_lock)
+            //{
+            //    if (this._vm != null)
+            //        return _vm;
+            //}
 
-            // simulate delay
-            await Task.Delay(1);
+            //// simulate delay
+            //await Task.Delay(1);
 
 
-            _vm = new ShellViewModel();
+            var _vm = new ShellViewModel();
             _vm.ShowShellBackButton = SettingsService.Instance.UseShellBackButton;
 
 
             _vm.CacheMaxDurationDays = SettingsService.Instance.CacheMaxDurationDays;
 
             _vm.ShowSplashScreen = true; // Factory = (e) => { return new Views.Splash(e); };
-
+            return _vm;
 
 
 

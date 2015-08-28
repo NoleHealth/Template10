@@ -11,19 +11,19 @@ namespace Minimal
     // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-Bootstrapper
     sealed partial class App : Template10.Common.BootStrapper
     {
-        ShellViewModel _shellViewModel = null;
+        public ShellViewModel ShellViewModel { get; private set; }
         public App()
         {
             InitializeComponent();
-            _shellViewModel = ShellDataSource.GetShellViewModel("");
+            ShellViewModel = ShellDataSource.GetShellViewModel("");
 
             // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-Cache
-            CacheMaxDuration = TimeSpan.FromDays(_shellViewModel.CacheMaxDurationDays);
+            CacheMaxDuration = TimeSpan.FromDays(this.ShellViewModel.CacheMaxDurationDays);
 
             // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-BackButton
-            ShowShellBackButton = _shellViewModel.ShowShellBackButton;
+            ShowShellBackButton = this.ShellViewModel.ShowShellBackButton;
 
-            if (_shellViewModel.ShowSplashScreen)
+            if (this.ShellViewModel.ShowSplashScreen)
             {
                 // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-SplashScreen
                 SplashFactory = (e) => new Views.Splash(e);
@@ -35,7 +35,9 @@ namespace Minimal
         {
             // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-SplitView
             var nav = NavigationServiceFactory(BackButton.Attach, ExistingContent.Include);
-            Window.Current.Content = new Views.Shell(nav);
+            var shell = new Views.Shell(nav, this.ShellViewModel);
+            //shell.ViewModel = _shellViewModel;
+            Window.Current.Content = shell;
 
             return Task.FromResult<object>(null);
         }

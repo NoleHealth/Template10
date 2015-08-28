@@ -1,4 +1,5 @@
-﻿using Template10.Services.NavigationService;
+﻿using Minimal.ViewModels;
+using Template10.Services.NavigationService;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -9,11 +10,15 @@ namespace Minimal.Views
     {
         private static Shell Instance { get; set; }
 
-        public Shell(NavigationService navigationService)
+        public ShellViewModel ViewModel { get { return DataContext as ShellViewModel; } private set { DataContext = value; } }
+
+        public Shell(NavigationService navigationService, ShellViewModel shellViewModel)
         {
             Instance = this;
+            this.ViewModel = shellViewModel;
             this.InitializeComponent();
             MyHamburgerMenu.NavigationService = navigationService;
+            
         }
 
         public static void SetBusyIndicator(bool busy, string text = null)
