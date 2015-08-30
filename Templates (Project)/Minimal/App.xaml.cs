@@ -15,7 +15,15 @@ namespace Minimal
         public App()
         {
             InitializeComponent();
-            ShellViewModel = ShellDataSource.GetShellViewModel("");
+            //ShellViewModel = ShellDataSource.GetShellViewModel("");
+
+            ShellViewModel.Instance.ShowShellBackButton = SettingsService.Instance.UseShellBackButton;
+
+
+            ShellViewModel.Instance.CacheMaxDurationDays = SettingsService.Instance.CacheMaxDurationDays;
+
+            ShellViewModel.Instance.ShowSplashScreen = true; // Factory = (e) => { return new Views.Splash(e); };
+
 
             // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-Cache
             CacheMaxDuration = TimeSpan.FromDays(this.ShellViewModel.CacheMaxDurationDays);

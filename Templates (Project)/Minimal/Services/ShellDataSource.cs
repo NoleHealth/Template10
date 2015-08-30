@@ -26,57 +26,56 @@ namespace Minimal.Services
         //    return _ds.ShellViewModel;
         //}
 
-        public static ShellViewModel GetShellViewModel(string app)
-        {
-
-        //    return GetShellViewModelAsync(app).Result;
-        //}
-
-        //private async Task loadDataAsync(string app)
+        //public static ShellViewModel GetShellViewModel(string app)
         //{
-            //lock (_lock)
-            //{
-            //    if (this._vm != null)
-            //        return _vm;
-            //}
 
-            //// simulate delay
-            //await Task.Delay(1);
+        //    //    return GetShellViewModelAsync(app).Result;
+        //    //}
 
+        //    //private async Task loadDataAsync(string app)
+        //    //{
+        //    //lock (_lock)
+        //    //{
+        //    //    if (this._vm != null)
+        //    //        return _vm;
+        //    //}
 
-            var _vm = new ShellViewModel();
-            _vm.ShowShellBackButton = SettingsService.Instance.UseShellBackButton;
-
-
-            _vm.CacheMaxDurationDays = SettingsService.Instance.CacheMaxDurationDays;
-
-            _vm.ShowSplashScreen = true; // Factory = (e) => { return new Views.Splash(e); };
-            return _vm;
+        //    //// simulate delay
+        //    //await Task.Delay(1);
 
 
+        //    ShellViewModel.Instance.ShowShellBackButton = SettingsService.Instance.UseShellBackButton;
 
-            //Uri dataUri;
-            //string fileName;
-            //if (string.IsNullOrEmpty(app))
-            //    fileName = "AppBootSettingData.json";
-            //else
-            //    fileName = app + "AppBootSettingData.json";
 
-            //if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
-            //    dataUri = new Uri("ms-appx:///Data/DesignTimeData/" + fileName);
-            //else
-            //    dataUri = new Uri("ms-appx:///Data/DemoData/" + fileName);
+        //    ShellViewModel.Instance.CacheMaxDurationDays = SettingsService.Instance.CacheMaxDurationDays;
 
-            //StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(dataUri);
-            //string jsonText = await FileIO.ReadTextAsync(file);
-
-            ////  "ShowAppBackButtonInTitleBar": false 
-            //this.ShellViewModel.ShowShellBackButton = jsonText.Contains("true");
+        //    ShellViewModel.Instance.ShowSplashScreen = true; // Factory = (e) => { return new Views.Splash(e); };
+        //    return _vm;
 
 
 
+        //    //Uri dataUri;
+        //    //string fileName;
+        //    //if (string.IsNullOrEmpty(app))
+        //    //    fileName = "AppBootSettingData.json";
+        //    //else
+        //    //    fileName = app + "AppBootSettingData.json";
 
-        }
+        //    //if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
+        //    //    dataUri = new Uri("ms-appx:///Data/DesignTimeData/" + fileName);
+        //    //else
+        //    //    dataUri = new Uri("ms-appx:///Data/DemoData/" + fileName);
+
+        //    //StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(dataUri);
+        //    //string jsonText = await FileIO.ReadTextAsync(file);
+
+        //    ////  "ShowAppBackButtonInTitleBar": false 
+        //    //this.ShellViewModel.ShowShellBackButton = jsonText.Contains("true");
+
+
+
+
+        //}
     }
 
 }

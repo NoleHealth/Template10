@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace Minimal.Mvvm
@@ -7,5 +8,11 @@ namespace Minimal.Mvvm
     public abstract class ViewModelBase : Template10.Mvvm.ViewModelBase
     {
         // the only thing that matters here is Template10.Services.NavigationService.INavagable
+
+        public string PrimaryNavigationEntryPath { get; set; } = "";
+        public IEnumerable<string> SecondaryNavigationEntryPaths { get; set; } = new string[0];
+        public IEnumerable<string> NavigationExitPaths { get; set; } = new string[0];
+
+        
     }
 }

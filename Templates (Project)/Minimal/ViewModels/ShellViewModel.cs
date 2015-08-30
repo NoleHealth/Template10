@@ -9,11 +9,28 @@ using Minimal.Views;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
+using Minimal.Mvvm;
 
 namespace Minimal.ViewModels
 {
     public class ShellViewModel : Minimal.Mvvm.ViewModelBase
     {
+        public static ShellViewModel Instance { get; private set; }
+
+        static ShellViewModel()
+        {
+            //there is always only one shell per app
+            // implement singleton pattern
+            Instance = Instance ?? new ShellViewModel();
+        }
+
+        private ShellViewModel()
+        {
+            PrimaryButtons = new ObservableCollection<NavigationButtonInfo>();
+            addTestButtoms();
+        }
+
+
         private bool _showShellBackButton = false;
         public bool ShowShellBackButton { get { return _showShellBackButton; } set { Set(ref _showShellBackButton, value); } }
 
@@ -21,21 +38,22 @@ namespace Minimal.ViewModels
         public bool ShowSplashScreen { get { return _showSplashScreen; } set { Set(ref _showSplashScreen, value); } }
 
         private int _cacheMaxDurationDays = 2;
+        
+        
+
         public int CacheMaxDurationDays { get { return _cacheMaxDurationDays; } set { Set(ref _cacheMaxDurationDays, value); } }
+
+        internal void OnViewnNavigatedTo(ViewModelBase viewModel)
+        {
+            throw new NotImplementedException();
+        }
 
         public ObservableCollection<NavigationButtonInfo> PrimaryButtons { get; set; }
 
-        public ShellViewModel()
-        {
-            PrimaryButtons = new ObservableCollection<NavigationButtonInfo>();
+        
 
-           
-        //}
-        //public override void OnNavigatedTo(object parameter, NavigationMode mode, IDictionary<string, object> state)
-        //{
-        //    base.OnNavigatedTo(parameter, mode, state);
-        //    if (PrimaryButtons.Count == 0)
-        //        return;
+        private void addTestButtoms()
+        {
             var navigationButtonInfo = new NavigationButtonInfo();
             navigationButtonInfo.ClearHistory = true;
             navigationButtonInfo.PageParameter = "";
