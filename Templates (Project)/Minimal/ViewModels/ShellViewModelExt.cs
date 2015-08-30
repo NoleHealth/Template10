@@ -10,21 +10,26 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
 using Minimal.Mvvm;
+using Minimal.Models;
 
 namespace Minimal.ViewModels
 {
-    public class ShellViewModel : Minimal.Mvvm.ViewModelBase
+    public class ShellViewModelExt : Minimal.Mvvm.ViewModelBaseExt
     {
-        public static ShellViewModel Instance { get; private set; }
+        public static ShellViewModelExt Instance { get; private set; }
 
-        static ShellViewModel()
+        static ShellViewModelExt()
         {
             //there is always only one shell per app
             // implement singleton pattern
-            Instance = Instance ?? new ShellViewModel();
+            Instance = Instance ?? new ShellViewModelExt();
         }
 
-        private ShellViewModel()
+        public override NavigationPattern NavigationPatternType { get; set; } = NavigationPattern.NavigationDrawer;
+        public override ViewAction ViewPurposeType { get; set; } = ViewAction.Navigation;
+        public override string PrimaryNavigationEntryPath { get; set; } = "";
+
+        private ShellViewModelExt()
         {
             PrimaryButtons = new ObservableCollection<NavigationButtonInfo>();
             addTestButtoms();
@@ -38,14 +43,48 @@ namespace Minimal.ViewModels
         public bool ShowSplashScreen { get { return _showSplashScreen; } set { Set(ref _showSplashScreen, value); } }
 
         private int _cacheMaxDurationDays = 2;
-        
-        
-
         public int CacheMaxDurationDays { get { return _cacheMaxDurationDays; } set { Set(ref _cacheMaxDurationDays, value); } }
 
-        internal void OnViewnNavigatedTo(ViewModelBase viewModel)
+
+        private Visibility _busyIndicatorVisible = Visibility.Collapsed;
+        public Visibility BusyIndicatorVisible { get { return _busyIndicatorVisible; } set { Set(ref _busyIndicatorVisible, value); } }
+
+        private bool _busyIndicatorActive = false;
+        public bool BusyIndicatorActive { get { return _busyIndicatorActive; } set { Set(ref _busyIndicatorActive, value); } }
+
+        private string _busyIndicatorText = "";
+        public string BusyIndicatorText { get { return _busyIndicatorText; } set { Set(ref _busyIndicatorText, value); } }
+
+
+        public void SetBusyIndicator(bool busy, string text = null)
         {
-            throw new NotImplementedException();
+            BusyIndicatorVisible = (busy)
+                ? Visibility.Visible : Visibility.Collapsed;
+            BusyIndicatorActive = busy;
+            BusyIndicatorText = text ?? string.Empty;
+
+            //Instance.BusyIndicator.Visibility = (busy)
+            //    ? Visibility.Visible : Visibility.Collapsed;
+            //Instance.BusyRing.IsActive = busy;
+            //Instance.BusyText.Text = text ?? string.Empty;
+        }
+
+
+
+
+
+        internal void OnViewnNavigatedTo(ViewModelBaseExt viewModel)
+        {
+            
+            if(string.IsNullOrEmpty(PrimaryNavigationEntryPath) == false)
+            {
+                //need to break it down
+
+
+            }
+
+            return;
+
         }
 
         public ObservableCollection<NavigationButtonInfo> PrimaryButtons { get; set; }

@@ -18,13 +18,9 @@ namespace Minimal.ViewModels
                 return;
             }
         }
-        
 
         public override void OnNavigatedTo(object parameter, NavigationMode mode, IDictionary<string, object> state)
         {
-            ShellViewModel svm = ShellViewModel.Instance;
-            svm.OnViewnNavigatedTo(this);
-
             if (state.Any())
             {
                 // use cache value(s)
@@ -58,3 +54,4 @@ namespace Minimal.ViewModels
         }
     }
 }
+

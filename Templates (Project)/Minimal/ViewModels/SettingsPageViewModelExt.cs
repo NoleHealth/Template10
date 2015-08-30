@@ -2,11 +2,11 @@
 
 namespace Minimal.ViewModels
 {
-    public class SettingsPageViewModel : Minimal.Mvvm.ViewModelBase
+    public class SettingsPageViewModelExt : Minimal.Mvvm.ViewModelBase
     {
         Services.SettingsServices.SettingsService _settings;
 
-        public SettingsPageViewModel()
+        public SettingsPageViewModelExt()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
@@ -26,8 +26,8 @@ namespace Minimal.ViewModels
 
         private string _BusyText = "Please wait...";
         public string BusyText { get { return _BusyText; } set { Set(ref _BusyText, BusyText); } }
-        public void ShowBusy() { Views.Shell.SetBusyIndicator(true, _BusyText); }
-        public void HideBusy() { Views.Shell.SetBusyIndicator(false); }
+        public void ShowBusy() { ShellViewModelExt.Instance.SetBusyIndicator(true, _BusyText); }
+        public void HideBusy() { ShellViewModelExt.Instance.SetBusyIndicator(false); }
 
         #endregion
 
@@ -49,4 +49,3 @@ namespace Minimal.ViewModels
         #endregion  
     }
 }
-

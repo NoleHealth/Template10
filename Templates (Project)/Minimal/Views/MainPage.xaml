@@ -11,15 +11,11 @@
     xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
     x:Class="Minimal.Views.MainPage"
     mc:Ignorable="d">
-
     <Page.DataContext>
         <vm:MainPageViewModel />
     </Page.DataContext>
-
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
         <!-- adaptive states -->
-
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="VisualStateGroup">
                 <VisualState x:Name="VisualStateNarrow">
@@ -36,12 +32,10 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-
         <!-- header -->
         <controls:PageHeader Text="Main Page" BackButtonVisibility="Collapsed" Frame="{x:Bind Frame, Mode=OneWay}">
             <AppBarButton Icon="Forward" Label="Forward">
@@ -50,9 +44,7 @@
                 </Interactivity:Interaction.Behaviors>
             </AppBarButton>
         </controls:PageHeader>
-
         <!--#region content-->
-
         <RelativePanel Grid.Row="1" Padding="12,8,0,0">
             <TextBox Header="Parameter to pass to this page" Width="200" Margin="0" 
                      Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="ParameterTextBox" >
@@ -65,8 +57,7 @@
             <Button Content="Submit" Click="{x:Bind ViewModel.GotoDetailsPage}" Margin="4,0" 
                     RelativePanel.RightOf="ParameterTextBox" RelativePanel.AlignBottomWith="ParameterTextBox" />
         </RelativePanel>
-
         <!--#endregion-->
-
     </Grid>
 </Page>
+

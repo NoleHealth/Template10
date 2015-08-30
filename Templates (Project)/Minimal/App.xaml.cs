@@ -11,27 +11,27 @@ namespace Minimal
     // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-Bootstrapper
     sealed partial class App : Template10.Common.BootStrapper
     {
-        public ShellViewModel ShellViewModel { get; private set; }
+        //public ShellViewModel ShellViewModel { get; private set; }
         public App()
         {
             InitializeComponent();
             //ShellViewModel = ShellDataSource.GetShellViewModel("");
 
-            ShellViewModel.Instance.ShowShellBackButton = SettingsService.Instance.UseShellBackButton;
+            ShellViewModelExt.Instance.ShowShellBackButton = SettingsService.Instance.UseShellBackButton;
 
 
-            ShellViewModel.Instance.CacheMaxDurationDays = SettingsService.Instance.CacheMaxDurationDays;
+            ShellViewModelExt.Instance.CacheMaxDurationDays = SettingsService.Instance.CacheMaxDurationDays;
 
-            ShellViewModel.Instance.ShowSplashScreen = true; // Factory = (e) => { return new Views.Splash(e); };
+            ShellViewModelExt.Instance.ShowSplashScreen = true; // Factory = (e) => { return new Views.Splash(e); };
 
 
             // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-Cache
-            CacheMaxDuration = TimeSpan.FromDays(this.ShellViewModel.CacheMaxDurationDays);
+            CacheMaxDuration = TimeSpan.FromDays(ShellViewModelExt.Instance.CacheMaxDurationDays);
 
             // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-BackButton
-            ShowShellBackButton = this.ShellViewModel.ShowShellBackButton;
+            ShowShellBackButton = ShellViewModelExt.Instance.ShowShellBackButton;
 
-            if (this.ShellViewModel.ShowSplashScreen)
+            if (ShellViewModelExt.Instance.ShowSplashScreen)
             {
                 // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-SplashScreen
                 SplashFactory = (e) => new Views.Splash(e);
@@ -43,7 +43,7 @@ namespace Minimal
         {
             // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-SplitView
             var nav = NavigationServiceFactory(BackButton.Attach, ExistingContent.Include);
-            var shell = new Views.Shell(nav, this.ShellViewModel);
+            var shell = new Views.Shell(nav);
             //shell.ViewModel = _shellViewModel;
             Window.Current.Content = shell;
 

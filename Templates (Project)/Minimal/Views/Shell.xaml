@@ -6,36 +6,17 @@
       xmlns:views="using:Minimal.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" x:Name="ThisPage"
-      xmlns:vm="using:Minimal.ViewModels">
-    <!--Because this is Shell, the ViewModel is created in App.cs and set manually in the page constructor
-    <Page.DataContext>
-        <vm:ShellViewModel />
-    </Page.DataContext>-->
-    <!--<Page.Resources>
-        <DataTemplate DataType="{x:Type sys:Boolean}">
-            <CheckBox IsChecked="{Binding Mode=OneWay}" />
-        </DataTemplate>
-    </Page.Resources>--> 
-    <!--http://matthamilton.net/winrt-typetemplateselector-->
+    mc:Ignorable="d" x:Name="ThisPage">
     <Grid>
-        <Controls:HamburgerMenu x:Name="MyHamburgerMenu" PrimaryButtons="{x:Bind ViewModel.PrimaryButtons }">
-
-            <!--<Controls:HamburgerMenu.PrimaryButtons>
+        <Controls:HamburgerMenu x:Name="MyHamburgerMenu">
+            <Controls:HamburgerMenu.PrimaryButtons>
                 <Controls:NavigationButtonInfo PageType="views:MainPage" ClearHistory="True">
                     <StackPanel Orientation="Horizontal">
                         <SymbolIcon Symbol="Home" Width="48" Height="48" />
                         <TextBlock Text="Home" VerticalAlignment="Center" Margin="12,0,0,0" />
                     </StackPanel>
                 </Controls:NavigationButtonInfo>
-                <Controls:NavigationButtonInfo PageType="views:HomePage" ClearHistory="True">
-                    <StackPanel Orientation="Horizontal">
-                        <SymbolIcon Symbol="Home" Width="48" Height="48" />
-                        <TextBlock Text="Home" VerticalAlignment="Center" Margin="12,0,0,0" />
-                    </StackPanel>
-                </Controls:NavigationButtonInfo>
-            </Controls:HamburgerMenu.PrimaryButtons>-->
-
+            </Controls:HamburgerMenu.PrimaryButtons>
             <Controls:HamburgerMenu.SecondaryButtons>
                 <Controls:NavigationButtonInfo PageType="views:SettingsPage">
                     <StackPanel Orientation="Horizontal">
@@ -44,9 +25,7 @@
                     </StackPanel>
                 </Controls:NavigationButtonInfo>
             </Controls:HamburgerMenu.SecondaryButtons>
-
         </Controls:HamburgerMenu>
-
         <Grid x:Name="BusyIndicator" Visibility="Collapsed" IsHitTestVisible="True">
             <Grid.Background>
                 <SolidColorBrush Color="Black" Opacity=".5" />
@@ -58,7 +37,6 @@
                 </StackPanel>
             </Viewbox>
         </Grid>
-
     </Grid>
-
 </Page>
+

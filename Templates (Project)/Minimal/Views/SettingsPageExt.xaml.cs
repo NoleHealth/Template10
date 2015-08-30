@@ -3,15 +3,15 @@ using Windows.UI.Xaml.Controls;
 
 namespace Minimal.Views
 {
-    public sealed partial class MainPage : Page
+    public sealed partial class SettingsPageExt : Page
     {
-        public MainPage()
+        public SettingsPageExt()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Disabled;
         }
 
         // strongly-typed view models enable x:bind
-        public MainPageViewModel ViewModel => this.DataContext as MainPageViewModel;
+        public SettingsPageViewModelExt ViewModel => this.DataContext as SettingsPageViewModelExt;
     }
 }

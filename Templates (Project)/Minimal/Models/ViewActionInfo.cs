@@ -1,11 +1,12 @@
 ﻿
 namespace Minimal.Models
 {
-    public class ViewFunction
+    public class ViewActionInfo
     {
-        public int ID { get; set; }
+        public ViewAction ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        
     }
 
 }
