@@ -18,7 +18,7 @@ namespace Minimal.Views
             this.ViewModel = ShellViewModelExt.Instance;
             this.InitializeComponent();
             MyHamburgerMenu.NavigationService = navigationService;
-            this.ViewModel = ShellViewModelExt.Instance;
+            
 
         }
 

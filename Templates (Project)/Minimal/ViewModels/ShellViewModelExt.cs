@@ -52,7 +52,7 @@ namespace Minimal.ViewModels
         private bool _busyIndicatorActive = false;
         public bool BusyIndicatorActive { get { return _busyIndicatorActive; } set { Set(ref _busyIndicatorActive, value); } }
 
-        private string _busyIndicatorText = "";
+        private string _busyIndicatorText = "blow me";
         public string BusyIndicatorText { get { return _busyIndicatorText; } set { Set(ref _busyIndicatorText, value); } }
 
 

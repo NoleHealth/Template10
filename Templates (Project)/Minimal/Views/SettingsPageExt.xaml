@@ -13,7 +13,7 @@
     mc:Ignorable="d">
 
     <Page.DataContext>
-        <vm:SettingsPageViewModel />
+        <vm:SettingsPageViewModelExt />
     </Page.DataContext>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">

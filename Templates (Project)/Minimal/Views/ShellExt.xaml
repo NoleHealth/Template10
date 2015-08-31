@@ -37,23 +37,23 @@
             </Controls:HamburgerMenu.PrimaryButtons>-->
 
             <Controls:HamburgerMenu.SecondaryButtons>
-                <Controls:NavigationButtonInfo PageType="views:SettingsPage">
+                <Controls:NavigationButtonInfo PageType="views:SettingsPageExt">
                     <StackPanel Orientation="Horizontal">
                         <SymbolIcon Symbol="Setting" Width="48" Height="48" />
-                        <TextBlock Text="Settings" VerticalAlignment="Center" Margin="12,0,0,0" />
+                        <TextBlock Text="SettingsExt" VerticalAlignment="Center" Margin="12,0,0,0" />
                     </StackPanel>
                 </Controls:NavigationButtonInfo>
             </Controls:HamburgerMenu.SecondaryButtons>
 
         </Controls:HamburgerMenu>
-        <Grid x:Name="BusyIndicator" Visibility="{x:Bind ViewModel.BusyIndicatorVisible, FallbackValue= Visibility.Collapsed}" IsHitTestVisible="True">
+        <Grid x:Name="BusyIndicator" Visibility="{x:Bind ViewModel.BusyIndicatorVisible, FallbackValue= Visibility.Collapsed, Mode=OneWay}" IsHitTestVisible="True">
             <Grid.Background>
                 <SolidColorBrush Color="Black" Opacity=".5" />
             </Grid.Background>
             <Viewbox Height="32">
                 <StackPanel Orientation="Horizontal">
-                    <ProgressRing x:Name="BusyRing"  IsActive="{x:Bind ViewModel.BusyIndicatorActive, FallbackValue=False}" Height="24" Width="24" Margin="12,0" Foreground="White" />
-                    <TextBlock x:Name="BusyText" Foreground="White" VerticalAlignment="Center" Text="{x:Bind ViewModel.BusyIndicatorText, FallbackValue='Fallback' }" />
+                    <ProgressRing x:Name="BusyRing"  IsActive="{x:Bind ViewModel.BusyIndicatorActive, FallbackValue=False, Mode=OneWay}" Height="24" Width="24" Margin="12,0" Foreground="White" />
+                    <TextBlock x:Name="BusyText" Foreground="White" VerticalAlignment="Center" Text="{x:Bind ViewModel.BusyIndicatorText, FallbackValue='Fallback', Mode=OneWay }" />
                 </StackPanel>
             </Viewbox>
         </Grid>
