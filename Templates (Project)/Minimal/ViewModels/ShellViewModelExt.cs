@@ -11,12 +11,35 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
 using Minimal.Mvvm;
 using Minimal.Models;
+using Minimal.Services.SettingsServices;
 
 namespace Minimal.ViewModels
 {
     public class ShellViewModelExt : Minimal.Mvvm.ViewModelBaseExt
     {
         public static ShellViewModelExt Instance { get; private set; }
+
+
+        public ObservableCollection<NavigationButtonInfo> PrimaryButtons { get; set; }
+        public ObservableCollection<NavigationButtonInfo> SecondaryButtons { get; set; }
+
+        public bool UseShellBackButton { get { return SettingsService.Instance.UseShellBackButton; } set { SettingsService.Instance.UseShellBackButton = value; base.RaisePropertyChanged(); } }
+        public int CacheMaxDurationDays { get { return SettingsService.Instance.CacheMaxDurationDays; } set { SettingsService.Instance.CacheMaxDurationDays = value; base.RaisePropertyChanged(); } }
+        public bool ShowSplashScreen { get { return SettingsService.Instance.ShowSplashScreen; } set { SettingsService.Instance.ShowSplashScreen = value; base.RaisePropertyChanged(); } }
+
+        private Visibility _busyIndicatorVisible = Visibility.Collapsed;
+        public Visibility BusyIndicatorVisible { get { return _busyIndicatorVisible; } set { Set(ref _busyIndicatorVisible, value); } }
+
+        private bool _busyIndicatorActive = false;
+        public bool BusyIndicatorActive { get { return _busyIndicatorActive; } set { Set(ref _busyIndicatorActive, value); } }
+
+        private string _busyIndicatorText = "BusyIndicatorText";
+        public string BusyIndicatorText { get { return _busyIndicatorText; } set { Set(ref _busyIndicatorText, value); } }
+
+        private string _applicationTitle = "ApplicationTitle";
+        public string ApplicationTitle { get { return _applicationTitle; } set { Set(ref _applicationTitle, value); } }
+
+
 
         static ShellViewModelExt()
         {
@@ -25,36 +48,19 @@ namespace Minimal.ViewModels
             Instance = Instance ?? new ShellViewModelExt();
         }
 
-        public override NavigationPattern NavigationPatternType { get; set; } = NavigationPattern.NavigationDrawer;
-        public override ViewAction ViewPurposeType { get; set; } = ViewAction.Navigation;
-        public override string PrimaryNavigationEntryPath { get; set; } = "";
-
+        
         private ShellViewModelExt()
         {
+            ApplicationTitle = " Who wrote this sh*t";
+            BusyIndicatorText = " busy bee";
+            NavigationPattern = NavigationPattern.NavigationDrawer;
+            ViewAction = ViewAction.Navigation;
+            PrimaryNavigationEntryPath = "";
+
             PrimaryButtons = new ObservableCollection<NavigationButtonInfo>();
-            addTestButtoms();
+            SecondaryButtons = new ObservableCollection<NavigationButtonInfo>();
+            //addTestButtoms();
         }
-
-
-        private bool _showShellBackButton = false;
-        public bool ShowShellBackButton { get { return _showShellBackButton; } set { Set(ref _showShellBackButton, value); } }
-
-        private bool _showSplashScreen = true;
-        public bool ShowSplashScreen { get { return _showSplashScreen; } set { Set(ref _showSplashScreen, value); } }
-
-        private int _cacheMaxDurationDays = 2;
-        public int CacheMaxDurationDays { get { return _cacheMaxDurationDays; } set { Set(ref _cacheMaxDurationDays, value); } }
-
-
-        private Visibility _busyIndicatorVisible = Visibility.Collapsed;
-        public Visibility BusyIndicatorVisible { get { return _busyIndicatorVisible; } set { Set(ref _busyIndicatorVisible, value); } }
-
-        private bool _busyIndicatorActive = false;
-        public bool BusyIndicatorActive { get { return _busyIndicatorActive; } set { Set(ref _busyIndicatorActive, value); } }
-
-        private string _busyIndicatorText = "blow me";
-        public string BusyIndicatorText { get { return _busyIndicatorText; } set { Set(ref _busyIndicatorText, value); } }
-
 
         public void SetBusyIndicator(bool busy, string text = null)
         {
@@ -76,9 +82,13 @@ namespace Minimal.ViewModels
         internal void OnViewnNavigatedTo(ViewModelBaseExt viewModel)
         {
             
-            if(string.IsNullOrEmpty(PrimaryNavigationEntryPath) == false)
+            addTestButtoms(viewModel is DetailPageViewModelExt);
+
+            if (string.IsNullOrEmpty(PrimaryNavigationEntryPath))
             {
                 //need to break it down
+
+
 
 
             }
@@ -87,34 +97,84 @@ namespace Minimal.ViewModels
 
         }
 
-        public ObservableCollection<NavigationButtonInfo> PrimaryButtons { get; set; }
-
+        
         
 
-        private void addTestButtoms()
+
+
+        private void addTestButtoms(bool addExtra=false)
         {
-            var navigationButtonInfo = new NavigationButtonInfo();
-            navigationButtonInfo.ClearHistory = true;
-            navigationButtonInfo.PageParameter = "";
-            navigationButtonInfo.PageType = Type.GetType("Minimal.Views.MainPage");
-            var stackPanel = new StackPanel { Orientation = Orientation.Horizontal };
-            stackPanel.Children.Add(new SymbolIcon { Symbol = Symbol.Home, Width = 48, Height = 48 });
-            stackPanel.Children.Add(new TextBlock { Text = "Main", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(12, 0, 0, 0) });
-            navigationButtonInfo.Content = stackPanel;
+            NavigationButtonInfo navigationButtonInfo;
 
-            PrimaryButtons.Add(navigationButtonInfo);
+            Type type;
+            string pageParameter;
+            Symbol symbol;
+            string text;
 
+            type = Type.GetType("Minimal.Views.HomePage");
+            if (PrimaryButtons.Any(p => p.PageType.Equals(type)) == false)
+            {
+                text = "Home";
+                symbol = Symbol.Home;
+                pageParameter = "Source=Shell";
+                navigationButtonInfo = createNavigationButtonInfo(type, text, symbol, pageParameter);
+                PrimaryButtons.Add(navigationButtonInfo);
+            }
 
+            type = Type.GetType("Minimal.Views.MasterPage");
+            if (PrimaryButtons.Any(p => p.PageType.Equals(type)) == false)
+            {
+                text = "Master";
+                symbol = Symbol.ImportAll;
+                pageParameter = "Source=Shell";
+                navigationButtonInfo = createNavigationButtonInfo(type, text, symbol, pageParameter);
+                PrimaryButtons.Add(navigationButtonInfo);
+            }
+
+            type = Type.GetType("Minimal.Views.SettingsPageExt");
+            if (SecondaryButtons.Any(p => p.PageType.Equals(type)) == false)
+            {
+                text = "Settings";
+                symbol = Symbol.Setting;
+                pageParameter = "Source=Shell";
+                navigationButtonInfo = createNavigationButtonInfo(type, text, symbol, pageParameter);
+                SecondaryButtons.Add(navigationButtonInfo);
+            }
+
+            type = Type.GetType("Minimal.Views.DetailPage");
+            navigationButtonInfo = PrimaryButtons.FirstOrDefault(p => p.PageType.Equals(type));
+            if (addExtra)
+            {
+                
+                if (navigationButtonInfo == null)
+                {
+                    text = "DetailPage";
+                    symbol = Symbol.Directions;
+                    pageParameter = "Source=Shell";
+                    navigationButtonInfo = createNavigationButtonInfo(type, text, symbol, pageParameter);
+                    PrimaryButtons.Add(navigationButtonInfo);
+                }
+            }
+            else
+            {
+                if(navigationButtonInfo != null)
+                    PrimaryButtons.Remove(navigationButtonInfo);
+            }
+        }
+
+        private static NavigationButtonInfo createNavigationButtonInfo(Type type, string text, Symbol symbol, string pageParameter)
+        {
+            NavigationButtonInfo navigationButtonInfo;
+            StackPanel stackPanel;
             navigationButtonInfo = new NavigationButtonInfo();
             navigationButtonInfo.ClearHistory = true;
-            navigationButtonInfo.PageParameter = "";
-            navigationButtonInfo.PageType = Type.GetType("Minimal.Views.HomePage");
+            navigationButtonInfo.PageParameter = pageParameter;
+            navigationButtonInfo.PageType = type;
             stackPanel = new StackPanel { Orientation = Orientation.Horizontal };
-            stackPanel.Children.Add(new SymbolIcon { Symbol = Symbol.Home, Width = 48, Height = 48 });
-            stackPanel.Children.Add(new TextBlock { Text = "Home", VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(12, 0, 0, 0) });
+            stackPanel.Children.Add(new SymbolIcon { Symbol = symbol, Width = 48, Height = 48 });
+            stackPanel.Children.Add(new TextBlock { Text = text, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(12, 0, 0, 0) });
             navigationButtonInfo.Content = stackPanel;
-
-            PrimaryButtons.Add(navigationButtonInfo);
+            return navigationButtonInfo;
         }
     }
 }

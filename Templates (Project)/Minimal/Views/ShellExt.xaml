@@ -6,7 +6,7 @@
       xmlns:views="using:Minimal.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" x:Name="ThisPage"
+    mc:Ignorable="d" x:Name="ShellExtPage"
       xmlns:vm="using:Minimal.ViewModels">
     <!--Because this is Shell, the ViewModel is created in App.cs and set manually in the page constructor
     <Page.DataContext>
@@ -19,7 +19,7 @@
     </Page.Resources>--> 
     <!--http://matthamilton.net/winrt-typetemplateselector-->
     <Grid>
-        <Controls:HamburgerMenu x:Name="MyHamburgerMenu" PrimaryButtons="{x:Bind ViewModel.PrimaryButtons }">
+        <Controls:HamburgerMenu x:Name="MyHamburgerMenu" PrimaryButtons="{x:Bind ViewModel.PrimaryButtons, Mode=OneWay}" SecondaryButtons="{x:Bind ViewModel.SecondaryButtons, Mode=OneWay }">
 
             <!--<Controls:HamburgerMenu.PrimaryButtons>
                 <Controls:NavigationButtonInfo PageType="views:MainPage" ClearHistory="True">
@@ -35,15 +35,14 @@
                     </StackPanel>
                 </Controls:NavigationButtonInfo>
             </Controls:HamburgerMenu.PrimaryButtons>-->
-
-            <Controls:HamburgerMenu.SecondaryButtons>
-                <Controls:NavigationButtonInfo PageType="views:SettingsPageExt">
+            <!--<Controls:HamburgerMenu.SecondaryButtons="{x:Bind ViewModel.PrimaryButtons }">
+               <Controls:NavigationButtonInfo PageType="views:SettingsPageExt">
                     <StackPanel Orientation="Horizontal">
                         <SymbolIcon Symbol="Setting" Width="48" Height="48" />
                         <TextBlock Text="SettingsExt" VerticalAlignment="Center" Margin="12,0,0,0" />
                     </StackPanel>
                 </Controls:NavigationButtonInfo>
-            </Controls:HamburgerMenu.SecondaryButtons>
+            </Controls:HamburgerMenu.SecondaryButtons>-->
 
         </Controls:HamburgerMenu>
         <Grid x:Name="BusyIndicator" Visibility="{x:Bind ViewModel.BusyIndicatorVisible, FallbackValue= Visibility.Collapsed, Mode=OneWay}" IsHitTestVisible="True">

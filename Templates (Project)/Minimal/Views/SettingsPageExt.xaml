@@ -24,7 +24,16 @@
         </Grid.RowDefinitions>
 
         <!-- header -->
-
+        <controls:PageHeaderExt Text="{x:Bind ViewModel.Title, FallbackValue='Fallback Settings Page Title'}"  Frame="{x:Bind Frame, Mode=OneWay}">
+            <!--<controls:PageHeaderExt.PrimaryCommands>
+                <AppBarButton Icon="Forward" Label="Forward">
+                    <Interactivity:Interaction.Behaviors>
+                        <Behaviors:NavButtonBehavior Direction="Forward" Frame="{x:Bind Frame, Mode=OneWay}"/>
+                    </Interactivity:Interaction.Behaviors>
+                </AppBarButton>
+            </controls:PageHeaderExt.PrimaryCommands>-->
+        </controls:PageHeaderExt>
+        
         <controls:PageHeader Text="Settings Page" Frame="{x:Bind Frame, Mode=OneWay}" />
 
         <!--#region content-->

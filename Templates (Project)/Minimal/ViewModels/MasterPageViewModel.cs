@@ -10,15 +10,15 @@ using Windows.UI.Xaml.Navigation;
 namespace Minimal.ViewModels
 {
     
-    public class HomePageViewModel : Minimal.Mvvm.ViewModelBaseExt
+    public class MasterPageViewModel : Minimal.Mvvm.ViewModelBaseExt
     {
         
         private string _Value = string.Empty;
         public string Value { get { return _Value; } set { Set(ref _Value, value); } }
 
-        public HomePageViewModel()
+        public MasterPageViewModel()
         {
-            Title = "Home";
+            Title = "Master";
             NavigationPattern = NavigationPattern.Springboard;
             ViewAction = ViewAction.Navigation;
             PrimaryNavigationEntryPath = "";
@@ -27,7 +27,7 @@ namespace Minimal.ViewModels
             {
                 // designtime data
                 Value = "Designtime value";
-                this.Title = "Designtime Home Page from VM";
+                this.Title = "Designtime Master";
                 return;
             }
 
@@ -36,7 +36,7 @@ namespace Minimal.ViewModels
 
         public void GotoDetailsPage()
         {
-            this.NavigationService.Navigate(typeof(Views.DetailPage), this.Value);
+            this.NavigationService.Navigate(typeof(Views.DetailPageExt), this.Value);
         }
 
         #region Navigation overrides

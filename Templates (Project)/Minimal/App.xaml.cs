@@ -21,7 +21,7 @@ namespace Minimal
         public App()
         {
             InitializeComponent();
-
+            
             if(_useExt)
             {
                 initExt();
@@ -78,19 +78,13 @@ namespace Minimal
 
         private void initExt()
         {
-            ShellViewModelExt.Instance.ShowShellBackButton = SettingsService.Instance.UseShellBackButton;
-
-
-            ShellViewModelExt.Instance.CacheMaxDurationDays = SettingsService.Instance.CacheMaxDurationDays;
-
-            ShellViewModelExt.Instance.ShowSplashScreen = true; // Factory = (e) => { return new Views.Splash(e); };
-
+            
 
             // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-Cache
             CacheMaxDuration = TimeSpan.FromDays(ShellViewModelExt.Instance.CacheMaxDurationDays);
 
             // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-BackButton
-            ShowShellBackButton = ShellViewModelExt.Instance.ShowShellBackButton;
+            ShowShellBackButton = ShellViewModelExt.Instance.UseShellBackButton;
 
             if (ShellViewModelExt.Instance.ShowSplashScreen)
             {

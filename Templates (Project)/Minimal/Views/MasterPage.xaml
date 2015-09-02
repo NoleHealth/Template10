@@ -9,10 +9,10 @@
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" 
     xmlns:Behaviors="using:Template10.Behaviors" 
     xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
-    x:Class="Minimal.Views.HomePage"
+    x:Class="Minimal.Views.MasterPage"
     mc:Ignorable="d">
     <Page.DataContext>
-        <vm:HomePageViewModel />
+        <vm:MasterPageViewModel />
     </Page.DataContext>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
@@ -20,7 +20,7 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <!-- header -->
-        <controls:PageHeaderExt Text="{x:Bind ViewModel.Title, FallbackValue='MainPageEx'}"  BackButtonVisibility="Collapsed" Frame="{x:Bind Frame, Mode=OneWay}">
+        <controls:PageHeaderExt Text="{x:Bind ViewModel.Title, FallbackValue='Fallback Title'}"  BackButtonVisibility="Collapsed" Frame="{x:Bind Frame, Mode=OneWay}">
             <controls:PageHeaderExt.PrimaryCommands>
                 
                 <AppBarButton Icon="Forward" Label="Forward">

@@ -150,3 +150,4 @@ namespace Template10.Controls
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }
+

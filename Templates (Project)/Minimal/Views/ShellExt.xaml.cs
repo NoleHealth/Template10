@@ -1,5 +1,6 @@
 ﻿using Minimal.ViewModels;
 using Template10.Services.NavigationService;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -18,7 +19,7 @@ namespace Minimal.Views
             this.ViewModel = ShellViewModelExt.Instance;
             this.InitializeComponent();
             MyHamburgerMenu.NavigationService = navigationService;
-            
+            ApplicationView.GetForCurrentView().Title = ShellViewModelExt.Instance.ApplicationTitle; 
 
         }
 

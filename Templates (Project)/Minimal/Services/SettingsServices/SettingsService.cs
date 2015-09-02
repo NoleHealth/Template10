@@ -45,5 +45,17 @@ namespace Minimal.Services.SettingsServices
                 Template10.Common.BootStrapper.Current.NavigationService.Refresh();
             }
         }
+
+        public bool ShowSplashScreen
+        {
+            get { return _helper.Read<bool>(nameof(ShowSplashScreen), true); }
+            set
+            {
+                _helper.Write(nameof(ShowSplashScreen), value);
+                Template10.Common.BootStrapper.Current.NavigationService.Refresh();
+            }
+        }
+
+        
     }
 }

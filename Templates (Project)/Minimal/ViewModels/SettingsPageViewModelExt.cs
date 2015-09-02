@@ -1,32 +1,37 @@
-﻿using System;
+﻿using Minimal.Models;
+using System;
 
 namespace Minimal.ViewModels
 {
-    public class SettingsPageViewModelExt : Minimal.Mvvm.ViewModelBase
+    public class SettingsPageViewModelExt : Minimal.Mvvm.ViewModelBaseExt
     {
-        Services.SettingsServices.SettingsService _settings;
+        //Services.SettingsServices.SettingsService _settings;
+
 
         public SettingsPageViewModelExt()
         {
+            NavigationPattern = NavigationPattern.Tabs;
+            ViewAction = ViewAction.Navigation;
+            PrimaryNavigationEntryPath = "";
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
                 // designtime data
                 return;
             }
-            _settings = Services.SettingsServices.SettingsService.Instance;
+            //_settings = Services.SettingsServices.SettingsService.Instance;
         }
 
         #region Settings
 
         public bool UseShellBackButton
         {
-            get { return _settings.UseShellBackButton; }
-            set { _settings.UseShellBackButton = value; base.RaisePropertyChanged(); }
+            get { return ShellViewModelExt.Instance.UseShellBackButton; }
+            set { ShellViewModelExt.Instance.UseShellBackButton = value; base.RaisePropertyChanged(); }
         }
 
         private string _BusyText = "Please wait...";
         public string BusyText { get { return _BusyText; } set { Set(ref _BusyText, BusyText); } }
-        public void ShowBusy() { ShellViewModelExt.Instance.SetBusyIndicator(true, _BusyText); }
+        public void ShowBusy() { ShellViewModelExt.Instance.SetBusyIndicator(true, this.BusyText); }
         public void HideBusy() { ShellViewModelExt.Instance.SetBusyIndicator(false); }
 
         #endregion
