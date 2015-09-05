@@ -97,6 +97,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\NavigationButtonInfoMeta.cs" />
     <Compile Include="Models\NavigationPatternInfo.cs" />
     <Compile Include="Models\NavigationPattern.cs" />
     <Compile Include="Models\ViewActionInfo.cs" />

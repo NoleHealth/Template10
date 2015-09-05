@@ -48,7 +48,7 @@ namespace Minimal.ViewModels
             Instance = Instance ?? new ShellViewModelExt();
         }
 
-        
+
         private ShellViewModelExt()
         {
             ApplicationTitle = " Who wrote this sh*t";
@@ -60,6 +60,9 @@ namespace Minimal.ViewModels
             PrimaryButtons = new ObservableCollection<NavigationButtonInfo>();
             SecondaryButtons = new ObservableCollection<NavigationButtonInfo>();
             //addTestButtoms();
+
+            //syncNavButtons(getPrimaryButtons(this, this.PrimaryButtons);
+            //syncNavButtons(getSecondaryButtons(this, this.SecondaryButtons);
         }
 
         public void SetBusyIndicator(bool busy, string text = null)
@@ -81,28 +84,111 @@ namespace Minimal.ViewModels
 
         internal void OnViewnNavigatedTo(ViewModelBaseExt viewModel)
         {
-            
-            addTestButtoms(viewModel is DetailPageViewModelExt);
-
-            if (string.IsNullOrEmpty(PrimaryNavigationEntryPath))
-            {
-                //need to break it down
-
-
-
-
-            }
+            //manage page specific nav buttons
+            syncNavButtons(getPrimaryButtons(viewModel), this.PrimaryButtons);
+            syncNavButtons(getSecondaryButtons(viewModel), this.SecondaryButtons);
 
             return;
 
         }
 
-        
-        
+
+        private void syncNavButtons(IEnumerable<NavigationButtonInfoMeta> buttonMetadata, ICollection<NavigationButtonInfo> buttons)
+        {
+            if (buttonMetadata == null)
+                return;
+            if (buttons == null)
+                return;
+
+            IEnumerable<string> currentButtonIDs, newButtonIDs;
+            List<string> pbRemove, pbAdd;
+
+
+            //These lists of of different types. Reducing each to lists of strings to compare.  
+            //Both types have ToString() overrides: string.Format("{0}({1})", PageType, PageParameter);
+            currentButtonIDs = buttons.Select(p => p.ToString());
+            newButtonIDs = buttonMetadata.Select(p => p.ToString());
+
+            // Remove
+            pbRemove = currentButtonIDs.Except(newButtonIDs).ToList();
+            pbRemove.ForEach(p => buttons.Remove(buttons.First(b => b.ToString() == p)));
+            //Add
+            currentButtonIDs = buttons.Select(p => p.ToString()); //reset to reflec Remove
+            pbAdd = newButtonIDs.Except(currentButtonIDs).ToList();
+            pbAdd.ForEach(p => buttons.Add(createNavigationButtonInfo(buttonMetadata.First(b => b.ToString() == p))));
+        }
 
 
 
-        private void addTestButtoms(bool addExtra=false)
+        private IEnumerable<NavigationButtonInfoMeta> getPrimaryButtons(ViewModelBaseExt viewModel)
+        {
+
+            //if (string.IsNullOrEmpty(PrimaryNavigationEntryPath))
+            //{
+            //    //need to break it down
+
+
+            //adding them twice and setting page shouldnt change primary buttons (extra gets dropped, just pass empty - no, smoehting? and handle)
+            //null for no change, 0 for 0
+            //windows UAP cache
+            //}
+            if (viewModel is ShellViewModelExt)
+                return null;
+
+            if (viewModel is SettingsPageViewModelExt)
+                return null;
+
+
+            IEnumerable<NavigationButtonInfoMeta> buttons = new NavigationButtonInfoMeta[]
+            {
+                new NavigationButtonInfoMeta()
+                {
+                    PageType =  Type.GetType("Minimal.Views.HomePage"),
+                    PageParameter = "Source=Shell",
+                    Text = "Home",
+                    Symbol = Symbol.Home
+                },
+                new NavigationButtonInfoMeta()
+                {
+                    PageType =  Type.GetType("Minimal.Views.MasterPage"),
+                    PageParameter = "Source=Shell",
+                    Text = "Master",
+                    Symbol = Symbol.ImportAll
+                }
+            };
+            if (viewModel is DetailPageViewModelExt)
+                buttons = buttons.Union(new NavigationButtonInfoMeta[] {
+                    new NavigationButtonInfoMeta()
+                    {
+                        PageType = Type.GetType("Minimal.Views.DetailPage"),
+                        PageParameter = "Source=Shell",
+                        Text = "Detail Page",
+                        Symbol = Symbol.AddFriend
+                    } });
+            return buttons;
+        }
+
+        private IEnumerable<NavigationButtonInfoMeta> getSecondaryButtons(ViewModelBaseExt viewModel)
+        {
+            //if ((viewModel is ShellViewModelExt) == false)
+            //    return null;
+
+            if (viewModel is ShellViewModelExt)
+                return null;
+
+            return new NavigationButtonInfoMeta[]
+            {
+                new NavigationButtonInfoMeta()
+                {
+                    PageType =  Type.GetType("Minimal.Views.SettingsPageExt"),
+                    PageParameter = "Source=Shell",
+                    Text = "Settings",
+                    Symbol = Symbol.Setting
+                }
+            };
+        }
+
+        private void addTestButtonsHardCoded(bool addExtra = false)
         {
             NavigationButtonInfo navigationButtonInfo;
 
@@ -145,7 +231,7 @@ namespace Minimal.ViewModels
             navigationButtonInfo = PrimaryButtons.FirstOrDefault(p => p.PageType.Equals(type));
             if (addExtra)
             {
-                
+
                 if (navigationButtonInfo == null)
                 {
                     text = "DetailPage";
@@ -157,9 +243,14 @@ namespace Minimal.ViewModels
             }
             else
             {
-                if(navigationButtonInfo != null)
+                if (navigationButtonInfo != null)
                     PrimaryButtons.Remove(navigationButtonInfo);
             }
+        }
+
+        private NavigationButtonInfo createNavigationButtonInfo(NavigationButtonInfoMeta m)
+        {
+            return createNavigationButtonInfo(m.PageType, m.Text, m.Symbol, m.PageParameter);
         }
 
         private static NavigationButtonInfo createNavigationButtonInfo(Type type, string text, Symbol symbol, string pageParameter)
