@@ -1,97 +1,42 @@
-﻿using Minimal.Services.SettingsServices;
-using Minimal.ViewModels;
-using System;
-using System.Threading.Tasks;
-using Template10.Services.NavigationService;
-using Windows.ApplicationModel.Activation;
+﻿using System;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
+using System.Threading.Tasks;
+using Sample.Services.SettingsServices;
+using Windows.ApplicationModel.Activation;
 
-namespace Minimal
+namespace Sample
 {
-    // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-Bootstrapper
+    /// Documentation on APIs used in this page:
+    /// https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-Bootstrapper
+    /// https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-Cache
+    /// https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-BackButton
+    /// https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-SplashScreen
+    /// https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-SplitView
+    /// https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-NavigationService
+
     sealed partial class App : Template10.Common.BootStrapper
     {
-        private bool _useExt = true;
-        private Type homePageType { get { return _useExt ? typeof(Views.HomePage) : typeof(Views.MainPage); } }
-        private Type toastAndTilePageType { get { return _useExt ? typeof(Views.DetailPage) : typeof(Views.DetailPage); } }
-        private Page createShell(NavigationService nav) { return _useExt ? new Views.ShellExt(nav) as Page : new Views.Shell(nav) as Page; }
-    
-        
         public App()
         {
             InitializeComponent();
-            
-            if(_useExt)
-            {
-                initExt();
-                return;
-            }
-
-            // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-Cache
             CacheMaxDuration = TimeSpan.FromDays(2);
-
-            // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-BackButton
             ShowShellBackButton = SettingsService.Instance.UseShellBackButton;
-
-            // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-SplashScreen
             SplashFactory = (e) => new Views.Splash(e);
         }
 
         // runs even if restored from state
         public override Task OnInitializeAsync(IActivatedEventArgs args)
         {
-            // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-SplitView
             var nav = NavigationServiceFactory(BackButton.Attach, ExistingContent.Include);
-            //Window.Current.Content = new Views.Shell(nav);
-            Window.Current.Content = createShell(nav);
-
+            Window.Current.Content = new Views.Shell(nav);
             return Task.FromResult<object>(null);
         }
 
         // runs only when not restored from state
         public override async Task OnStartAsync(StartKind startKind, IActivatedEventArgs args)
         {
-            // simulated long-running load on startup
             await Task.Delay(50);
-
-            // start user experience
-            switch (DetermineStartCause(args))
-            {
-                // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-Toast
-                case AdditionalKinds.Toast:
-
-                // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-SecondaryTile
-                case AdditionalKinds.SecondaryTile:
-                    var e = (args as ILaunchActivatedEventArgs);
-                    //NavigationService.Navigate(typeof(Views.DetailPage), e.Arguments);
-                    NavigationService.Navigate(toastAndTilePageType, e.Arguments);
-                    break;
-
-                // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-NavigationService
-                default:
-                    //NavigationService.Navigate(typeof(Views.MainPage));
-                    NavigationService.Navigate(homePageType);
-                    break;
-            }
-        }
-
-        private void initExt()
-        {
-            
-
-            // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-Cache
-            CacheMaxDuration = TimeSpan.FromDays(ShellViewModelExt.Instance.CacheMaxDurationDays);
-
-            // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-BackButton
-            ShowShellBackButton = ShellViewModelExt.Instance.UseShellBackButton;
-
-            if (ShellViewModelExt.Instance.ShowSplashScreen)
-            {
-                // DOCS: https://github.com/Windows-XAML/Template10/wiki/Docs-%7C-SplashScreen
-                SplashFactory = (e) => new Views.Splash(e);
-            }
+            NavigationService.Navigate(typeof(Views.MainPage));
         }
     }
 }
-
